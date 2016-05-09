@@ -1,0 +1,57 @@
+h1, h2, h3{
+  margin-top: 10px;
+}
+ol, ul{
+  padding-left: 15px;
+  padding-bottom: 10px;
+}
+blockquote{
+  /*background: RGBA(44, 62, 80, 1.00);*/
+  background: #F0DDAA;
+  color: #34495e;
+}
+
+h1{
+  font-size: 22px;
+}
+h2{
+  font-size: 20px;
+}
+h3{
+  font-size: 18px;
+}
+h4, h5, h6{
+  font-size: 16px;
+}
+p{
+  font-size: 14px;
+}
+pre code{
+  font-size: 14px;
+}
+img{
+  max-width: 500px;
+  height: 100%
+}
+
+@media screen and (max-width: 640px) {
+  h1{
+    font-size: 20px;
+  }
+  h2{
+    font-size: 18px;
+  }
+  h3{
+    font-size: 16px;
+  }
+  p{
+    font-size: 14px;
+  }
+  pre code{
+    font-size: 14px;
+  }
+  img{
+    max-width: 290px;
+    height: 100%
+  }
+}
