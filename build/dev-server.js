@@ -75,6 +75,11 @@ app.post('/login', function (req, res) {
   }
 })
 
+app.post('/save', function (req, res) {
+  var todos = req.body
+  console.log(todos)
+})
+
 module.exports = app.listen(port, function (err) {
   if (err) {
     console.log(err)

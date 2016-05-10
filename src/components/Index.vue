@@ -36,11 +36,9 @@
       <span class="todo-count">
         <strong v-text="remaining"></strong> {{remaining | pluralize 'item'}} left
       </span>
-      <ul class="filters">
-        <li class="li"><a class="route" href="#/all" :class="{selected: visibility == 'all'}">All</a></li>
-        <li class="li"><a class="route" href="#/active" :class="{selected: visibility == 'active'}">Active</a></li>
-        <li class="li"><a class="route" href="#/completed" :class="{selected: visibility == 'completed'}">Completed</a></li>
-      </ul>
+      <button class="btn-footer" :class="{selected: visibility == 'all'}" @click="selectAll">All</button>
+      <button class="btn-footer" :class="{selected: visibility == 'active'}" @click="selectActive">Active</button>
+      <button class="btn-footer" :class="{selected: visibility == 'completed'}" @click="selectCompleted">Completed</button>
       <button class="clear-completed" @click="removeCompleted">
         Clear completed
       </button>
@@ -51,6 +49,7 @@
 </template>
 
 <script>
+  import marked from 'marked'
   const filters = {
     all: function (todos) {
       return todos
@@ -66,48 +65,41 @@
       })
     }
   }
-  const doSave = function (value, type, name) {
-    var blob
-    if (typeof window.Blob === 'function') {
-      blob = new Blob([value], {
-        type: type
-      })
-    } else {
-      var BlobBuilder = window.BlobBuilder || window.MozBlobBuilder || window.WebKitBlobBuilder || window.MSBlobBuilder
-      var bb = new BlobBuilder()
-      bb.append(value)
-      blob = bb.getBlob(type)
-    }
-    var URL = window.URL || window.webkitURL
-    var bloburl = URL.createObjectURL(blob)
-    var anchor = document.createElement('a')
-    if ('download' in anchor) {
-      anchor.style.visibility = 'hidden'
-      anchor.href = bloburl
-      anchor.download = name
-      document.body.appendChild(anchor)
-      var evt = document.createEvent('MouseEvents')
-      evt.initEvent('click', true, true)
-      anchor.dispatchEvent(evt)
-      document.body.removeChild(anchor)
-    } else if (navigator.msSaveBlob) {
-      navigator.msSaveBlob(blob, name)
-    } else {
-      location.href = bloburl
-    }
-  }
-
-  function top () {
-    document.getElementsByTagName('body')[0].scrollTop = 0
-  }
   export default {
     data () {
       return {
-        todos: [],
+        todos: [{
+          detail: '# 123',
+          completed: false
+        }],
         visibility: 'all',
         query: '',
         detail: '',
         adding: false
+      }
+    },
+    watch: {
+      todos: {
+        handler: function () {
+          const todos = JSON.stringify(this.todos)
+          this.$http.post('save', todos).then((res) => {
+            console.log(res.data)
+          })
+        },
+        deep: true
+      }
+    },
+    computed: {
+      filteredTodos: function () {
+        return filters[this.visibility](this.todos)
+      },
+      remaining: function () {
+        return filters.active(this.todos).length
+      },
+      allDone: {
+        get: function () {
+          return this.remaining === 0
+        }
       }
     },
     methods: {
@@ -160,18 +152,26 @@
       exportTodo: function (todo) {
         let now = new Date()
         now = now.getTime() + '.md'
-        doSave(todo.detail, 'text/latex', now)
       },
-      toTop: function () {
-        top()
-      }
+      selectAll: function () {
+        this.visibility = 'all'
+      },
+      selectActive: function () {
+        this.visibility = 'active'
+      },
+      selectCompleted: function () {
+        this.visibility = 'completed'
+      },
+      toTop: function () {}
+    },
+    filters: {
+      marked: marked
     }
   }
 </script>
 <style scoped>
 .todoapp{
-  margin: 10px auto;
-  padding: 0 15px;
+  padding-top: 15px;
 	border-radius: 6px;
 }
 .header{
@@ -319,22 +319,7 @@
 	color: #34495e;
 	border-radius: 0 0 6px 6px;
 }
-.footer .filters{
-	list-style: none;
-	position: absolute;
-	top: 50%;
-	left: 200px;
-	transform: translate3d(-50%, -50%, 0);
-	padding: 0 0 0 80px;
-}
-.footer .filters .li{
-	display: inline;
-	padding-left: 10px;
-}
-.footer .filters .route{
-	color: inherit;
-	text-decoration: none;
-}
+
 .footer .clear-completed{
 	float: right;
 	padding: 0;
@@ -345,7 +330,14 @@
 .footer .todo-count{
 	margin-left: 40px;
 }
-
+.btn-footer{
+  background: none;
+  border: 0 none;
+  outline: none;
+}
+.footer .selected{
+  color: #eeeeee;
+}
 .top{
 	position: fixed;
 	right: 20px;
