@@ -66,12 +66,14 @@
     }
   }
   export default {
+    ready: function () {
+      this.$http.get('todos').then((res) => {
+        this.$set('todos', res.data[0].todos)
+      })
+    },
     data () {
       return {
-        todos: [{
-          detail: '# 123',
-          completed: false
-        }],
+        todos: [],
         visibility: 'all',
         query: '',
         detail: '',
