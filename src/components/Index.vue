@@ -43,13 +43,12 @@
         Clear completed
       </button>
     </footer>
-    <div class="top" @click="toTop">
-      <span class="glyphicon glyphicon-arrow-up to-top"></span>
-    </div>
+    <Scrolltop></Scrolltop>
 </template>
 
 <script>
   import marked from 'marked'
+  import Scrolltop from './Scrolltop'
   const filters = {
     all: function (todos) {
       return todos
@@ -66,6 +65,9 @@
     }
   }
   export default {
+    components: {
+      Scrolltop
+    },
     ready: function () {
       this.$http.get('todos').then((res) => {
         this.$set('todos', res.data[0].todos)
@@ -78,17 +80,6 @@
         query: '',
         detail: '',
         adding: false
-      }
-    },
-    watch: {
-      todos: {
-        handler: function () {
-          const todos = JSON.stringify(this.todos)
-          this.$http.post('save', todos).then((res) => {
-            console.log(res.data)
-          })
-        },
-        deep: true
       }
     },
     computed: {
@@ -107,6 +98,10 @@
     methods: {
       toggleStatus: function (todo) {
         todo.completed = !todo.completed
+        const todos = JSON.stringify(this.todos)
+        this.$http.post('save', todos).then((res) => {
+          console.log(res.data)
+        })
       },
       toggleAll: function () {
         const done = this.allDone
@@ -128,9 +123,17 @@
           this.todos.$remove(cacheTodo)
           this.cacheTodo = null
         }
+        const todos = JSON.stringify(this.todos)
+        this.$http.post('save', todos).then((res) => {
+          console.log(res.data)
+        })
       },
       removeTodo: function (todo) {
         this.todos.$remove(todo)
+        const todos = JSON.stringify(this.todos)
+        this.$http.post('save', todos).then((res) => {
+          console.log(res.data)
+        })
       },
       cancelAdd: function () {
         const cacheTodo = this.cacheTodo
@@ -142,6 +145,10 @@
       },
       removeCompleted: function () {
         this.todos = filters.active(this.todos)
+        const todos = JSON.stringify(this.todos)
+        this.$http.post('save', todos).then((res) => {
+          console.log(res.data)
+        })
       },
       changeAdding: function () {
         this.adding = !this.adding
@@ -274,8 +281,6 @@
 .todo-control .glyphicon:hover{
 	opacity: 1;
 }
-
-
 .main .completed{
 	background: RGBA(44, 62, 80, 1.00);
 }
@@ -339,24 +344,6 @@
 }
 .footer .selected{
   color: #eeeeee;
-}
-.top{
-	position: fixed;
-	right: 20px;
-	bottom: 30px;
-}
-.to-top{
-	padding: 8px;
-	border-radius: 100%;
-	font-size: 20px;
-	color: #34495e;
-	background: #31ADA0;
-	opacity: 0.6;
-	cursor: pointer;
-	transition: 0.3s ease-in-out;
-}
-.to-top:hover{
-	opacity: 1;
 }
 @media screen and (max-width: 640px) {
 	.container{

@@ -16,6 +16,7 @@
 </template>
 <script>
   import {router} from '../main'
+  import api from '../api/index'
   export default {
     data () {
       return {
@@ -33,14 +34,7 @@
     methods: {
       login () {
         const user = this.user
-        this.$http.post('login/', user).then((res) => {
-          console.log(res.data)
-          if (res.data.success === '1') {
-            router.go('index')
-          }
-        }, function (res) {
-          this.error = res
-        })
+        api.localLogin(user)
       },
       register () {
         router.go('register')

@@ -1,16 +1,10 @@
 import Vue from 'vue'
 import App from './App'
-import Login from './components/Login'
-import Register from './components/Register'
-import Index from './components/Index'
-import Todos from './components/Todos'
+import configRouter from './routes'
 
 import VueRouter from 'vue-router'
-import VueResource from 'vue-resource'
 
-// 注册两个插件
 Vue.use(VueRouter)
-Vue.use(VueResource)
 
 Vue.transition('bounce', {
   type: 'animation',
@@ -28,27 +22,11 @@ Vue.transition('updown', {
   leaveClass: 'bounceOutUp'
 })
 
-export const router = new VueRouter()
-
-router.map({
-  '/login': {
-    component: Login
-  },
-  '/register': {
-    component: Register
-  },
-  '/index': {
-    component: Index,
-    subRoutes: {
-      '/todos': {
-        component: Todos
-      }
-    }
-  }
+export const router = new VueRouter({
+  history: true,
+  saveScrollPosition: true,
+  suppressTransitionError: true
 })
-
-router.redirect({
-  '*': '/login'
-})
+configRouter(router)
 
 router.start(App, '#app')

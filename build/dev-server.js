@@ -32,18 +32,22 @@ var devMiddleware = require('webpack-dev-middleware')(compiler, {
 
 var hotMiddleware = require('webpack-hot-middleware')(compiler)
 // force page reload when html-webpack-plugin template changes
-compiler.plugin('compilation', function (compilation) {
-  compilation.plugin('html-webpack-plugin-after-emit', function (data, cb) {
-    hotMiddleware.publish({ action: 'reload' })
+compiler.plugin('compilation', function(compilation) {
+  compilation.plugin('html-webpack-plugin-after-emit', function(data, cb) {
+    hotMiddleware.publish({
+      action: 'reload'
+    })
     cb()
   })
 })
 
 // proxy api requests
-Object.keys(proxyTable).forEach(function (context) {
+Object.keys(proxyTable).forEach(function(context) {
   var options = proxyTable[context]
   if (typeof options === 'string') {
-    options = { target: options }
+    options = {
+      target: options
+    }
   }
   app.use(proxyMiddleware(context, options))
 })
@@ -63,7 +67,9 @@ var staticPath = path.posix.join(config.build.assetsPublicPath, config.build.ass
 app.use(staticPath, express.static('./static'))
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
 // parse application/json
 app.use(bodyParser.json())
 
@@ -71,43 +77,74 @@ app.use(session({
   store: new RedisStore({
     host: 'localhost',
     port: 6379,
-    ttl: 60*60
+    ttl: 60 * 60
   }),
-  resave:false,
-  saveUninitialized:false,
+  resave: false,
+  saveUninitialized: false,
   secret: 'keyboard cat'
 }))
 
-app.post('/login', function (req, res) {
+app.get('/login', function(req, res) {
+  if (req.session.user) {
+    res.redirect('index')
+  }
+})
+
+app.post('/login', function(req, res) {
   var user = req.body
-  User.find(user, function(err, doc){
+  User.find(user, function(err, doc) {
     if (err) {
-      res.json({success: '-1'})
+      res.json({
+        success: '-1'
+      })
       return
     }
-    if (!doc){
-      res.json({success: '0'})
+    if (!doc) {
+      res.json({
+        success: '0'
+      })
     } else {
       req.session.user = user.username
-      res.json({success: '1'})
+      res.json({
+        success: '1'
+      })
     }
   })
 })
 
-app.post('/register', function (req, res) {
+
+
+app.get('/index', function(req, res) {
+  console.log(req.session.user)
+  if (!req.session.user) {
+    res.redirect('login')
+  }
+})
+
+app.get('/register', function(req, res) {
+  if (!req.session.user) {
+    res.redirect('login')
+  }
+})
+
+app.post('/register', function(req, res) {
   var username = req.body.username
   var password = req.body.password
-  User.find({username: username}, function (err, doc) {
-    if(err) console.log(err);
+  User.find({
+    username: username
+  }, function(err, doc) {
+    if (err) console.log(err);
     if (doc.length >= 1) {
-      res.json({success:'-3'})
-    }else{
+      res.json({
+        success: '-3'
+      })
+    } else {
       var user = new User({
         username: username,
         password: password,
       })
-      user.save(function (err, doc) {
-        if(err) {
+      user.save(function(err, doc) {
+        if (err) {
           return
         }
       })
@@ -115,42 +152,50 @@ app.post('/register', function (req, res) {
         username: username,
         todos: []
       })
-      todos.save(function (err, doc) {
+      todos.save(function(err, doc) {
         if (err) {
           return
         }
-        res.json({success:'1'})
+        res.json({
+          success: '1'
+        })
       })
     }
   })
 })
 
-app.post('/save', function (req, res) {
+app.post('/save', function(req, res) {
   if (req.session.user) {
     var username = req.session.user
     var todo = {
       username: username,
       todos: req.body
     }
-    Todos.update({username: username}, todo, {upsert: true}, function(err, doc){
-      if(err) return
+    Todos.update({
+      username: username
+    }, todo, {
+      upsert: true
+    }, function(err, doc) {
+      if (err) return
       console.log(doc)
     })
   } else {
-    res.redirect('404')
+    res.status('401').send()
   }
 })
 
-app.get('/todos', function (req, res) {
+app.get('/todos', function(req, res) {
   if (req.session.user) {
     var username = req.session.user
     var todo = {
       username: username,
       todos: req.body
     }
-    Todos.find({username: username}, function(err, doc){
+    Todos.find({
+      username: username
+    }, function(err, doc) {
       console.log(1);
-      if(err) return
+      if (err) return
       console.log(doc)
       res.json(doc)
     })
@@ -159,7 +204,7 @@ app.get('/todos', function (req, res) {
   }
 })
 
-module.exports = app.listen(port, function (err) {
+module.exports = app.listen(port, function(err) {
   if (err) {
     console.log(err)
     return
