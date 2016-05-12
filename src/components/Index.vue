@@ -49,7 +49,7 @@
 <script>
   import marked from 'marked'
   import Scrolltop from './Scrolltop'
-
+  import tools from '../utils/tools'
   const filters = {
     all: function (todos) {
       return todos
@@ -170,6 +170,7 @@
       exportTodo: function (todo) {
         let now = new Date()
         now = now.getTime() + '.md'
+        tools.doSave(todo.detail, 'text/latex', now)
       },
       selectAll: function () {
         this.visibility = 'all'

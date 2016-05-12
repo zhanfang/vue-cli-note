@@ -127,21 +127,6 @@ app.post('/login', function(req, res) {
   })
 })
 
-
-
-app.get('/index', function(req, res) {
-  console.log(req.session.user)
-  if (!req.session.user) {
-    res.redirect('login')
-  }
-})
-
-app.get('/register', function(req, res) {
-  if (!req.session.user) {
-    res.redirect('login')
-  }
-})
-
 app.post('/register', function(req, res) {
   var username = req.body.username
   var password = req.body.password
@@ -192,7 +177,6 @@ app.post('/save', function(req, res) {
       upsert: true
     }, function(err, doc) {
       if (err) return
-      console.log(doc)
     })
   } else {
     res.status('401').send()
@@ -209,9 +193,7 @@ app.get('/todos', function(req, res) {
     Todos.find({
       username: username
     }, function(err, doc) {
-      console.log(1);
       if (err) return
-      console.log(doc)
       res.json(doc)
     })
   } else {
