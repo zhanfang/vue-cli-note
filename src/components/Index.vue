@@ -32,5 +32,8 @@
     padding-left: 150px;
   }
   @media screen and (max-width: 640px) {
+    .onShow{
+      padding-left: 70px;
+    }
   }
 </style>

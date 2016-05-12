@@ -34,7 +34,7 @@ const router = new VueRouter({
   suppressTransitionError: true
 })
 configRouter(router)
-router.redirect({'*': 'login'})
+router.redirect({'*': '/login'})
 window.router = router
 
 router.start(App, '#app')

@@ -356,6 +356,14 @@
   color: #eeeeee;
 }
 @media screen and (max-width: 640px) {
+  .header{
+    font-size: 14px;
+    padding: 10px;
+  }
+  .header .search{
+
+    width: 200px;
+  }
 	.main .todo{
 		font-size: 12px;
 	}
