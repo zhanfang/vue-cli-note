@@ -31,7 +31,7 @@
 .top{
   position: fixed;
   right: 20px;
-  bottom: 30px;
+  bottom: 50px;
 }
 .to-top{
   padding: 8px;

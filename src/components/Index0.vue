@@ -1,4 +1,6 @@
 <template>
+  <Sidebar class="sidebar" :slide="slide" :class="{sidebarShow: slide}" v-show="slide"></Sidebar>
+  <router-view></router-view>
   <div class="all" :class="{onShow: slide}">
     <div class="todoapp">
       <header class="header">
@@ -43,11 +45,16 @@
       </button>
     </footer>
   </div>
+  <Scrolltop></Scrolltop>
+  <div class="side">
+    <span class="glyphicon glyphicon-align-justify" :class="{iconshow: slide}" @click="showAside"></span>
+  </div>
 </template>
 
 <script>
   import marked from 'marked'
-  import Todo from './Todo'
+  import Scrolltop from './Scrolltop'
+  import Sidebar from './Sidebar'
   import tools from '../utils/tools'
   const filters = {
     all: function (todos) {
@@ -66,11 +73,19 @@
   }
   export default {
     components: {
-      Todo
+      Scrolltop,
+      Sidebar
     },
     ready: function () {
-      this.$http.get('/todos').then((res) => {
-        this.$set('todos', res.data[0].todos)
+      this.$http.get('getStatus').then(res => {
+        this.$set('status', res.data.success)
+        if (res.data.success !== 200) {
+          window.location.href = 'login'
+        } else {
+          this.$http.get('todos').then((res) => {
+            this.$set('todos', res.data[0].todos)
+          })
+        }
       })
     },
     data () {
@@ -80,7 +95,8 @@
         visibility: 'all',
         query: '',
         detail: '',
-        adding: false
+        adding: false,
+        slide: false
       }
     },
     computed: {
@@ -353,6 +369,20 @@
   outline: none;
 }
 .footer .selected{
+  color: #eeeeee;
+}
+.side{
+  position: fixed;
+  bottom: 50px;
+  left: 20px;
+  z-index: 3;
+}
+.glyphicon-align-justify{
+  color: #34495e;
+  font-size: 22px;
+  cursor: pointer;
+}
+.iconshow{
   color: #eeeeee;
 }
 @media screen and (max-width: 640px) {

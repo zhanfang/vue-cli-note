@@ -1,0 +1,9 @@
+/* 必需 */
+.sidebar-transition {
+  transition: all .3s ease;
+  width: 200px;
+}
+.sidebar-enter, .sidebar-leave {
+  width: 0;
+  opacity: 0
+}

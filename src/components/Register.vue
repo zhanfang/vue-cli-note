@@ -24,7 +24,7 @@
       this.$http.get('getStatus').then(res => {
         this.$set('status', res.data.success)
         if (res.data.success === 200) {
-          window.location.href = 'index'
+          window.location.href = 'index/todos'
         }
       })
     },
@@ -48,8 +48,8 @@
         const user = this.user
         this.$http.post('register/', user).then((res) => {
           console.log(res.data)
-          if (res.data.success === '1') {
-            window.router.go('index')
+          if (res.data.success === 200) {
+            window.router.go('index/todos')
           }
         }, function (res) {
           this.error = res

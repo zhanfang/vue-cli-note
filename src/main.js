@@ -23,6 +23,10 @@ Vue.transition('updown', {
   enterClass: 'bounceInDown',
   leaveClass: 'bounceOutUp'
 })
+Vue.transition('fadeleft', {
+  enterClass: 'fadeInLeft',
+  leaveClass: 'fadeOutLeft'
+})
 
 const router = new VueRouter({
   history: true,

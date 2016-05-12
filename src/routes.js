@@ -1,6 +1,8 @@
 import Login from './components/Login'
 import Register from './components/Register'
 import Index from './components/Index'
+import Help from './components/Help'
+import Todos from './components/Todos'
 
 export default function (router) {
   router.map({
@@ -11,7 +13,15 @@ export default function (router) {
       component: Register
     },
     '/index': {
-      component: Index
+      component: Index,
+      subRoutes: {
+        'todos': {
+          component: Todos
+        },
+        'help': {
+          component: Help
+        }
+      }
     }
   })
 }

@@ -84,7 +84,7 @@ app.use(session({
   }),
   resave: false,
   saveUninitialized: false,
-  secret: 'keyboard cat'
+  secret: 'keyboard'
 }))
 
 app.get('/login', function(req, res) {
