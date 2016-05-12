@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var db = require('./db-server')
 var session = require('express-session')
 var RedisStore = require('connect-redis')(session)
+var cookieParser = require('cookie-parser')
 var webpack = require('webpack')
 var config = require('../config')
 var proxyMiddleware = require('http-proxy-middleware')
@@ -73,6 +74,8 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json())
 
+// app.use(cookieParser())
+
 app.use(session({
   store: new RedisStore({
     host: 'localhost',
@@ -90,23 +93,35 @@ app.get('/login', function(req, res) {
   }
 })
 
+app.get('/getStatus', function(req, res) {
+  if (req.session.user) {
+    res.status(200).json({
+      success: 200
+    })
+  }else {
+    res.status(200).json({
+      success: 404
+    })
+  }
+})
+
 app.post('/login', function(req, res) {
   var user = req.body
   User.find(user, function(err, doc) {
     if (err) {
-      res.json({
-        success: '-1'
+      res.status(500).json({
+        success: 500
       })
       return
     }
-    if (!doc) {
-      res.json({
-        success: '0'
+    if (doc.length === 1) {
+      req.session.user = user.username
+      res.status(200).json({
+        success: 200
       })
     } else {
-      req.session.user = user.username
-      res.json({
-        success: '1'
+      res.status(404).json({
+        success: 404
       })
     }
   })

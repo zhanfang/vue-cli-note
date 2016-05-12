@@ -1,10 +1,12 @@
 import Vue from 'vue'
 import App from './App'
+import VueResource from 'vue-resource'
 import configRouter from './routes'
 
 import VueRouter from 'vue-router'
 
 Vue.use(VueRouter)
+Vue.use(VueResource)
 
 Vue.transition('bounce', {
   type: 'animation',
@@ -22,11 +24,13 @@ Vue.transition('updown', {
   leaveClass: 'bounceOutUp'
 })
 
-export const router = new VueRouter({
+const router = new VueRouter({
   history: true,
   saveScrollPosition: true,
   suppressTransitionError: true
 })
 configRouter(router)
+router.redirect({'*': 'login'})
+window.router = router
 
 router.start(App, '#app')

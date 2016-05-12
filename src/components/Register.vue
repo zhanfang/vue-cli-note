@@ -19,11 +19,19 @@
   </div>
 </template>
 <script>
-  import {router} from '../main'
   export default {
+    ready () {
+      this.$http.get('getStatus').then(res => {
+        this.$set('status', res.data.success)
+        if (res.data.success === 200) {
+          window.location.href = 'index'
+        }
+      })
+    },
     data () {
       return {
         user: {
+          status: 0,
           username: '',
           password: '',
           repassword: ''
@@ -41,14 +49,14 @@
         this.$http.post('register/', user).then((res) => {
           console.log(res.data)
           if (res.data.success === '1') {
-            router.go('index')
+            window.router.go('index')
           }
         }, function (res) {
           this.error = res
         })
       },
       login () {
-        router.go('login')
+        window.router.go('login')
       }
     }
   }

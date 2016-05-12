@@ -15,11 +15,18 @@
   </div>
 </template>
 <script>
-  import {router} from '../main'
-  import api from '../api/index'
   export default {
+    ready () {
+      this.$http.get('getStatus').then(res => {
+        this.$set('status', res.data.success)
+        if (res.data.success === 200) {
+          window.location.href = 'index'
+        }
+      })
+    },
     data () {
       return {
+        status: 0,
         user: {
           username: '',
           password: ''
@@ -34,10 +41,17 @@
     methods: {
       login () {
         const user = this.user
-        api.localLogin(user)
+        this.$http.post('login/', user).then((res) => {
+          window.status = res.data.success
+          if (res.data.success === 200) {
+            window.router.go('index')
+          }
+        }, function (res) {
+          this.error = res.data.success
+        })
       },
       register () {
-        router.go('register')
+        window.router.go('register')
       }
     }
   }

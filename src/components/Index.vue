@@ -49,6 +49,7 @@
 <script>
   import marked from 'marked'
   import Scrolltop from './Scrolltop'
+
   const filters = {
     all: function (todos) {
       return todos
@@ -69,12 +70,20 @@
       Scrolltop
     },
     ready: function () {
-      this.$http.get('todos').then((res) => {
-        this.$set('todos', res.data[0].todos)
+      this.$http.get('getStatus').then(res => {
+        this.$set('status', res.data.success)
+        if (res.data.success !== 200) {
+          window.location.href = 'login'
+        } else {
+          this.$http.get('todos').then((res) => {
+            this.$set('todos', res.data[0].todos)
+          })
+        }
       })
     },
     data () {
       return {
+        status: 0,
         todos: [],
         visibility: 'all',
         query: '',
