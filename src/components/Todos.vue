@@ -44,7 +44,7 @@
     </footer>
   </div>
 </template>
-
+</script>
 <script>
   import marked from 'marked'
   import Todo from './Todo'

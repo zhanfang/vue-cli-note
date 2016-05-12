@@ -12,6 +12,10 @@
     }
   }
 </script>
+<style src="./assets/css/animate.css"></style>
+<style src="./assets/css/bootstrap.css"></style>
+<style src="./assets/css/markdown.css"></style>
+<style src="./assets/css/vue-animate.css"></style>
 <style scoped>
   .app{
     padding: 15px 60px;
