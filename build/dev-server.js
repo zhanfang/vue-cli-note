@@ -95,6 +95,7 @@ app.get('/login', function(req, res) {
 
 app.get('/getStatus', function(req, res) {
   if (req.session.user) {
+    console.log(req.session.user)
     res.status(200).json({
       success: 200
     })
@@ -136,7 +137,7 @@ app.post('/register', function(req, res) {
     if (err) console.log(err);
     if (doc.length >= 1) {
       res.json({
-        success: '-3'
+        success: 300
       })
     } else {
       var user = new User({
@@ -147,18 +148,12 @@ app.post('/register', function(req, res) {
         if (err) {
           return
         }
-      })
-      var todos = new Todos({
-        username: username,
-        todos: []
-      })
-      todos.save(function(err, doc) {
-        if (err) {
-          return
+        if (doc.length === 1){
+          req.session.user = username
+          res.json({
+            success: 200
+          })
         }
-        res.json({
-          success: '1'
-        })
       })
     }
   })
