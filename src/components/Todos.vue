@@ -13,21 +13,11 @@
 
       <Editmd :adding.sync="adding" :todos.sync="todos" :detail.sync="detail" :cachetodo.sync="cacheTodo"></Editmd>
 
-      <ul class="main" v-cloak>
-        <li class="todo animated" v-for="todo in filteredTodos | filterBy query in 'detail'" transition="bounce" :class="{completed: todo.completed, bounce: todo.completed}">
-          <span class="glyphicon glyphicon-ok" @click="toggleStatus(todo)"></span>
-          <div class="content" @dblclick="editedTodo(todo)">
-            <div class="detail" v-html="todo.detail | marked"></div>
-          </div>
-          <div class="todo-control">
-            <span class="glyphicon glyphicon-pencil" @click="editedTodo(todo)"></span>
-            <span class="glyphicon glyphicon-remove" @click="removeTodo(todo)"></span>
-            <span class="glyphicon glyphicon-download-alt" @click="exportTodo(todo)"></span>
-          </div>
-        </li>
+      <ul class="main">
+        <Todo :adding.sync="adding" :todos.sync="filteredTodos" :detail.sync="detail" :cachetodo.sync="cacheTodo" :query.sync="query"></Todo>
       </ul>
     </div>
-    <footer class="footer" v-show="todos.length" v-cloak>
+    <footer class="footer" v-show="todos.length">
       <span class="glyphicon glyphicon-ok" :class="{okAll: allDone}" @click="toggleAll()"></span>
       <span class="todo-count">
         <strong v-text="remaining"></strong> {{remaining | pluralize 'item'}} left
@@ -43,10 +33,9 @@
 </template>
 </script>
 <script>
-  import marked from 'marked'
   import Todo from './Todo'
   import Editmd from './Editmd'
-  import tools from '../utils/tools'
+
   const filters = {
     all: function (todos) {
       return todos
@@ -97,52 +86,11 @@
       }
     },
     methods: {
-      toggleStatus: function (todo) {
-        todo.completed = !todo.completed
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
-      },
       toggleAll: function () {
         const done = this.allDone
         this.todos.forEach(function (todo) {
           todo.completed = !done
         })
-      },
-      save: function () {
-        const detail = this.detail.trim()
-        if (!detail) return
-        this.todos.unshift({
-          detail: detail,
-          completed: false
-        })
-        this.detail = ''
-        this.adding = false
-        const cacheTodo = this.cacheTodo
-        if (cacheTodo) {
-          this.todos.$remove(cacheTodo)
-          this.cacheTodo = null
-        }
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
-      },
-      removeTodo: function (todo) {
-        this.todos.$remove(todo)
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
-      },
-      cancelAdd: function () {
-        const cacheTodo = this.cacheTodo
-        if (cacheTodo) {
-          this.cacheTodo = null
-        }
-        this.detail = ''
-        this.adding = false
       },
       removeCompleted: function () {
         this.todos = filters.active(this.todos)
@@ -154,16 +102,6 @@
       changeAdding: function () {
         this.adding = !this.adding
       },
-      editedTodo: function (todo) {
-        this.cacheTodo = todo
-        this.adding = true
-        this.detail = todo.detail
-      },
-      exportTodo: function (todo) {
-        let now = new Date()
-        now = now.getTime() + '.md'
-        tools.doSave(todo.detail, 'text/latex', now)
-      },
       selectAll: function () {
         this.visibility = 'all'
       },
@@ -172,13 +110,7 @@
       },
       selectCompleted: function () {
         this.visibility = 'completed'
-      },
-      showAside: function () {
-        this.slide = !this.slide
       }
-    },
-    filters: {
-      marked: marked
     }
   }
 </script>
@@ -225,74 +157,21 @@
 	background: RGBA(44, 62, 80, 1.00);
 	color: #ffffff;
 }
-.main .todo{
-	position: relative;
-	margin-bottom: 2px;
-	padding: 15px 20px;
-	list-style: none;
-	font-size: 14px;
-	background: #34495e;
-}
-.main .todo:last-child{
-	margin: 0;
-}
-.main .todo:hover .todo-control{
-	top: 10px;
-	opacity: 1;
-}
-.todo-control{
-	position: absolute;
-	top: -10px;
-	right: 20px;
-	font-size: 18px;
-	color: #ffffff;
-	opacity: 0;
-	transition: .3s ease-in-out;
-}
-.todo-control .glyphicon{
-	padding-left: 5px;
-	opacity: 0.6;
-}
-.todo-control .glyphicon:hover{
-	opacity: 1;
-}
-.main .completed{
-	background: RGBA(44, 62, 80, 1.00);
-}
-.main .completed .glyphicon-ok{
-	color: #34495e;
-	background: #31ADA0;
-}
-.main .completed .content{
-	color: #31ADA0;
-}
-.main .content{
-	margin-left: 40px;
-}
-.main .content .title{
-	display: block;
-	border: 0 none;
-	background: none;
-	font-size: 20px;
-	margin-bottom: 10px;
-	outline: none;
-}
-
 .glyphicon-ok{
-	position: absolute;
-	top:50%;
-	transform: translate3d(0,-50%,0);
-	padding: 4px;
-	font-size: 14px;
-	border-radius: 50%;
-	background: #ffffff;
-	color: rgba(255, 255, 255, 0);
-	cursor: pointer;
+  position: absolute;
+  top:50%;
+  transform: translate3d(0,-50%,0);
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: rgba(255, 255, 255, 0);
+  cursor: pointer;
 }
 .okAll{
-	cursor: pointer;
-	color: #31ADA0;
-	background: #34495e;
+  cursor: pointer;
+  color: #31ADA0;
+  background: #34495e;
 }
 .footer{
 	position: relative;
@@ -301,7 +180,6 @@
 	color: #34495e;
 	border-radius: 0 0 6px 6px;
 }
-
 .footer .clear-completed{
 	float: right;
 	padding: 0;
@@ -326,21 +204,8 @@
     padding: 10px;
   }
   .header .search{
-
     width: 200px;
   }
-	.main .todo{
-		font-size: 12px;
-	}
-	.main .todo .content{
-		margin: 0;
-	}
-	.glyphicon-ok{
-		display: none;
-	}
-	.todo-control{
-		font-size: 12px
-	}
 	.footer .todo-count{
 		margin: 0;
 	}

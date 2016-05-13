@@ -1,5 +1,5 @@
 <template>
-  <li class="todo animated" v-for="todo in filteredTodos | filterBy query in 'detail'" transition="bounce" :class="{completed: todo.completed, bounce: todo.completed}">
+  <li class="todo animated" v-for="todo in todos | filterBy query in 'detail'" transition="bounce" :class="{completed: todo.completed, bounce: todo.completed}">
     <span class="glyphicon glyphicon-ok" @click="toggleStatus(todo)"></span>
     <div class="content" @dblclick="editedTodo(todo)">
       <div class="detail" v-html="todo.detail | marked"></div>
@@ -17,12 +17,24 @@
   import tools from '../utils/tools'
 
   export default {
-    props: ['filteredTodos', 'query'],
+    props: ['todos', 'query', 'adding', 'cachetodo', 'detail'],
     methods: {
+      toggleStatus: function (todo) {
+        todo.completed = !todo.completed
+        const todos = JSON.stringify(this.todos)
+        this.$http.post('/save', todos).then((res) => {
+          console.log(res.data)
+        })
+      },
       exportTodo: function (todo) {
         let now = new Date()
         now = now.getTime() + '.md'
         tools.doSave(todo.detail, 'text/latex', now)
+      },
+      editedTodo: function (todo) {
+        this.cacheTodo = todo
+        this.adding = true
+        this.detail = todo.detail
       },
       removeTodo: function (todo) {
         this.todos.$remove(todo)
@@ -39,12 +51,16 @@
 </script>
 <style scoped>
 .todo{
-	position: relative;
-	padding: 15px 20px;
-	list-style: none;
-	font-size: 14px;
-  color: #ffffff;
-	background: #34495e;
+  position: relative;
+  margin-bottom: 2px;
+  padding: 15px 20px;
+  list-style: none;
+  font-size: 14px;
+  color: #eeeeee;
+  background: #34495e;
+}
+.main .todo:last-child{
+  margin: 0;
 }
 .todo:hover .todo-control{
 	top: 10px;
@@ -79,25 +95,16 @@
 .content{
 	margin-left: 40px;
 }
-.content .title{
-	display: block;
-	border: 0 none;
-	background: none;
-	font-size: 20px;
-	margin-bottom: 10px;
-	outline: none;
-}
-
 .glyphicon-ok{
-	position: absolute;
-	top:50%;
-	transform: translate3d(0,-50%,0);
-	padding: 4px;
-	font-size: 14px;
-	border-radius: 50%;
-	background: #ffffff;
-	color: rgba(255, 255, 255, 0);
-	cursor: pointer;
+  position: absolute;
+  top:50%;
+  transform: translate3d(0,-50%,0);
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: rgba(255, 255, 255, 0);
+  cursor: pointer;
 }
 .okAll{
 	cursor: pointer;
@@ -105,15 +112,11 @@
 	background: #34495e;
 }
 @media screen and (max-width: 640px) {
-	.container{
-		margin: 0;
-		padding: 0;
-	}
-	.main .todo{
+	.todo{
 		font-size: 12px;
 		padding: 15px;
 	}
-	.main .todo .content{
+	.todo .content{
 		margin: 0;
 	}
 	.glyphicon-ok{
@@ -121,12 +124,6 @@
 	}
 	.todo-control{
 		font-size: 12px
-	}
-	.footer .todo-count{
-		margin: 0;
-	}
-	.footer .filters{
-		display: none;
 	}
 }
 </style>

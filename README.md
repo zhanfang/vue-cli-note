@@ -1,4 +1,4 @@
-# vue-test
+# vue-note
 
 > A Vue.js project
 
