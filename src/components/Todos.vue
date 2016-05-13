@@ -206,10 +206,7 @@
   .header .search{
     width: 200px;
   }
-	.footer .todo-count{
-		margin: 0;
-	}
-	.footer .filters{
+	.footer .btn-footer{
 		display: none;
 	}
 }

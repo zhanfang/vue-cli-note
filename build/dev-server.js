@@ -79,8 +79,7 @@ app.use(bodyParser.json())
 app.use(session({
   store: new RedisStore({
     host: 'localhost',
-    port: 6379,
-    ttl: 60 * 60
+    port: 6379
   }),
   resave: false,
   saveUninitialized: false,
