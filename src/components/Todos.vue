@@ -10,12 +10,9 @@
           v-model="query"
         >
       </header>
-      <div class="edit animated" v-show="adding" transition="updown">
-        <textarea class="content" v-model="detail" debounce="500" placeholder="请使用markdown语法编辑笔记">
-        </textarea>
-        <button class="btn btn-save" type="button" @click="save">保 存</button>
-        <button class="btn btn-cancel" type="button" @click="cancelAdd">取 消</button>
-      </div>
+
+      <Editmd :adding.sync="adding" :todos.sync="todos" :detail.sync="detail" :cachetodo.sync="cacheTodo"></Editmd>
+
       <ul class="main" v-cloak>
         <li class="todo animated" v-for="todo in filteredTodos | filterBy query in 'detail'" transition="bounce" :class="{completed: todo.completed, bounce: todo.completed}">
           <span class="glyphicon glyphicon-ok" @click="toggleStatus(todo)"></span>
@@ -48,6 +45,7 @@
 <script>
   import marked from 'marked'
   import Todo from './Todo'
+  import Editmd from './Editmd'
   import tools from '../utils/tools'
   const filters = {
     all: function (todos) {
@@ -66,7 +64,8 @@
   }
   export default {
     components: {
-      Todo
+      Todo,
+      Editmd
     },
     ready: function () {
       this.$http.get('/todos').then((res) => {
@@ -80,7 +79,8 @@
         visibility: 'all',
         query: '',
         detail: '',
-        adding: false
+        adding: false,
+        cacheTodo: null
       }
     },
     computed: {
@@ -100,7 +100,7 @@
       toggleStatus: function (todo) {
         todo.completed = !todo.completed
         const todos = JSON.stringify(this.todos)
-        this.$http.post('save', todos).then((res) => {
+        this.$http.post('/save', todos).then((res) => {
           console.log(res.data)
         })
       },
@@ -125,14 +125,14 @@
           this.cacheTodo = null
         }
         const todos = JSON.stringify(this.todos)
-        this.$http.post('save', todos).then((res) => {
+        this.$http.post('/save', todos).then((res) => {
           console.log(res.data)
         })
       },
       removeTodo: function (todo) {
         this.todos.$remove(todo)
         const todos = JSON.stringify(this.todos)
-        this.$http.post('save', todos).then((res) => {
+        this.$http.post('/save', todos).then((res) => {
           console.log(res.data)
         })
       },
@@ -147,7 +147,7 @@
       removeCompleted: function () {
         this.todos = filters.active(this.todos)
         const todos = JSON.stringify(this.todos)
-        this.$http.post('save', todos).then((res) => {
+        this.$http.post('/save', todos).then((res) => {
           console.log(res.data)
         })
       },

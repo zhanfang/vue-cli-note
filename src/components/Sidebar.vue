@@ -5,8 +5,9 @@
         导航
       </div>
       <ul class="list">
-        <li class="item" @click="goTo('todos')">note列表</li>
-        <li class="item" @click="goTo('help')">markdown语法帮助</li>
+        <li class="item" @click="goTo('todos')">笔记列表</li>
+        <li class="item" @click="goTo('help')">md语法帮助</li>
+        <li class="item" @click="goTo('user')">用户中心</li>
       </ul>
     </div>
   </aside>

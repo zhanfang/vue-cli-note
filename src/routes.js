@@ -3,6 +3,8 @@ import Register from './components/Register'
 import Index from './components/Index'
 import Help from './components/Help'
 import Todos from './components/Todos'
+import Editmd from './components/Editmd'
+import User from './components/User'
 
 export default function (router) {
   router.map({
@@ -20,8 +22,14 @@ export default function (router) {
         },
         'help': {
           component: Help
+        },
+        'user': {
+          component: User
         }
       }
+    },
+    '/edit': {
+      component: Editmd
     }
   })
 }
