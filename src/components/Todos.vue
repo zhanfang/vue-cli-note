@@ -1,5 +1,5 @@
 <template>
-  <div class="all" :class="{onShow: slide}">
+  <div class="all animated" :class="{onShow: slide}" transition="bounce">
     <div class="todoapp">
       <header class="header">
         <span class="glyphicon glyphicon-plus" @click="changeAdding"></span>
