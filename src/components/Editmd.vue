@@ -89,6 +89,7 @@
 .edit .btn{
 	float: right;
 	padding: 5px 17px;
+  margin-left: 7px;
 	outline: none;
 }
 .edit .btn-save{
