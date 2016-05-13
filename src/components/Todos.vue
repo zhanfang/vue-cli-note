@@ -219,41 +219,6 @@
 	transform: translate3d(0, -50%, 0);
 	cursor: pointer;
 }
-.edit{
-	padding: 10px 20px;
-	background: #F0DDAA;
-	color: #34495e;
-	overflow: hidden;
-}
-
-.edit .title{
-	width: 100%;
-	margin-bottom: 10px;
-	padding: 4px 10px;
-	border: 0 none;
-	border-radius: 3px;
-	font-size: 16px;
-	outline: none;
-}
-.edit .content{
-	width: 100%;
-	min-height: 300px;
-	padding: 10px;
-	margin-bottom: 5px;
-	border: 0 none;
-	border-radius: 5px;
-	outline: none;
-	background: #ffffff;
-}
-.edit .btn{
-	float: right;
-	padding: 5px 17px;
-	margin-left: 10px;
-	outline: none;
-}
-.edit .btn-save{
-	background: RGBA(49, 173, 160, 1.00);
-}
 .main{
 	margin: 0px;
 	padding: 0;

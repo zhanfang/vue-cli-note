@@ -6,7 +6,7 @@ ol, ul{
   padding-bottom: 10px;
 }
 blockquote{
-  /*background: RGBA(44, 62, 80, 1.00);*/
+  padding: 5px 10px;
   background: #F0DDAA;
   color: #34495e;
 }
@@ -26,6 +26,9 @@ h4, h5, h6{
 p{
   font-size: 14px;
 }
+pre{
+  padding: 5px 10px;
+}
 pre code{
   font-size: 14px;
 }
@@ -34,6 +37,18 @@ img{
   height: 100%
 }
 
+.edit .preview h1{
+  font-size: 20px;
+}
+.edit .preview h2{
+  font-size: 18px;
+}
+.edit .preview h3{
+  font-size: 16px;
+}
+.edit .preview h4, h5, h6{
+  font-size: 14px;
+}
 @media screen and (max-width: 640px) {
   h1{
     font-size: 20px;

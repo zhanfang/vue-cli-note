@@ -20,7 +20,7 @@
       this.$http.get('getStatus').then(res => {
         this.$set('status', res.data.success)
         if (res.data.success === 200) {
-          window.location.href = 'index/todos'
+          window.router.go('/index/todos')
         }
       })
     },
