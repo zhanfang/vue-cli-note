@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
 import { API_ROOT } from '../config'
-import { signOut } from '../utils/authService'
 
 Vue.use(VueResource)
 Vue.http.options.emulateJSON = true
@@ -21,7 +20,6 @@ Vue.http.interceptors.push({
   response (response) {
     // 这里可以对响应的结果进行处理
     if (response.status === 401) {
-      signOut()
       window.location.pathname = '/login'
     }
     return response
@@ -30,3 +28,5 @@ Vue.http.interceptors.push({
 
 export const UserResource = Vue.resource(API_ROOT + 'users{/id}')
 export const AuthResource = Vue.resource(API_ROOT + 'login')
+export const LogoutResource = Vue.resource(API_ROOT + 'logout')
+export const RegisterResource = Vue.resource(API_ROOT + 'register')

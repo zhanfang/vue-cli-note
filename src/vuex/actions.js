@@ -1,5 +1,6 @@
 import api from '../api'
 import * as types from './types'
+
 export const showMsg = ({dispatch}, content, type = 'error') => {
   dispatch(types.SHOW_MSG, {content: content, type: type})
   setTimeout(dispatch.bind(null, types.HIDE_MSG), 3000)
@@ -15,4 +16,14 @@ export const login = (store, user) => {
   }, res => {
     showMsg(store, res.data.error_msg || '登录失败')
   })
+}
+export const logout = (store) => {
+  api.logout().then(res => {
+    if (!res.ok) {
+      return showMsg(store, res.data.error_msg || '登陆失败')
+    }
+    showMsg(store, '登出成功', 'success')
+  })
+  store.router.go({path: '/login'})
+  store.dispatch(types.LOGOUT_USER)
 }

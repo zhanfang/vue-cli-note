@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT } from '../types'
+import { LOGIN_SUCCESS, LOGOUT_USER } from '../types'
 
 const state = {
   user: ''
@@ -8,8 +8,8 @@ const mutations = {
   [LOGIN_SUCCESS] (state, action) {
     state.user = action.user
   },
-  [LOGOUT] (state) {
-    state.user = null
+  [LOGOUT_USER] (state) {
+    state.user = ''
   }
 }
 export default {
