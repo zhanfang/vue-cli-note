@@ -4,6 +4,7 @@ import { API_ROOT } from '../config'
 import { signOut } from '../utils/authService'
 
 Vue.use(VueResource)
+Vue.http.options.emulateJSON = true
 
 // HTTP相关
 Vue.http.options.crossOrigin = true

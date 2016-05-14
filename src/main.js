@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import App from './App'
-import VueResource from 'vue-resource'
-import configRouter from './routes'
-
 import VueRouter from 'vue-router'
+import configRouter from './routes'
+import {sync} from 'vuex-router-sync'
+import store from './vuex/store.js'
 
 Vue.use(VueRouter)
-Vue.use(VueResource)
 
 Vue.transition('bounce', {
   type: 'animation',
@@ -34,6 +33,7 @@ const router = new VueRouter({
   suppressTransitionError: true
 })
 configRouter(router)
+sync(store, router)
 router.redirect({'*': '/login'})
 window.router = router
 
