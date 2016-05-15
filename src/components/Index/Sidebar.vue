@@ -7,7 +7,7 @@
       <ul class="list">
         <li class="item" @click="goTo('todos')">笔记列表</li>
         <li class="item" @click="goTo('help')">md语法帮助</li>
-        <li class="item" @click="goTo('user')">用户中心</li>
+        <li class="item" @click="logout">{{user.username}} 退出</li>
       </ul>
     </div>
   </aside>
@@ -16,8 +16,17 @@
   </div>
 </template>
 <script>
+  import {logout} from '../../vuex/actions.js'
   export default {
     props: ['slide'],
+    vuex: {
+      getters: {
+        user: ({user}) => user.user
+      },
+      actions: {
+        logout
+      }
+    },
     methods: {
       goTo: function (url) {
         window.router.go(url)

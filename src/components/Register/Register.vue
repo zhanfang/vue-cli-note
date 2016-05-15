@@ -11,49 +11,38 @@
       </div>
       <div class="form-group">
         <label>请重新输入密码</label>
-        <input class="form-control" type="password" name="repassword" v-model="user.repassword" placeholder="必填字段">
+        <input class="form-control" type="password" name="repassword" v-model="repassword" placeholder="必填字段">
       </div>
-      <button class="btn btn-success btn-register" @click="register" :disabled="!state">注册</button>
+      <button class="btn btn-success btn-register" @click="registerClick" :disabled="!state">注册</button>
       <button class="btn btn-default btn-login" @click="login">登陆</button>
     </div>
   </div>
 </template>
 <script>
+  import {register} from '../../vuex/actions.js'
   export default {
-    ready () {
-      this.$http.get('getStatus').then(res => {
-        this.$set('status', res.data.success)
-        if (res.data.success === 200) {
-          window.router.go('/index/todos')
-        }
-      })
+    vuex: {
+      actions: {
+        register
+      }
     },
     data () {
       return {
         user: {
-          status: 0,
           username: '',
-          password: '',
-          repassword: ''
-        }
+          password: ''
+        },
+        repassword: ''
       }
     },
     computed: {
       state () {
-        return this.user.username.trim().length >= 4 && this.user.password.trim().length >= 8 && this.user.password === this.user.repassword
+        return this.user.username.trim().length >= 4 && this.user.password.trim().length >= 8 && this.user.password === this.repassword
       }
     },
     methods: {
-      register () {
-        const user = this.user
-        this.$http.post('register/', user).then((res) => {
-          console.log(res.data)
-          if (res.data.success === 200) {
-            window.router.go('index/todos')
-          }
-        }, function (res) {
-          this.error = res
-        })
+      registerClick () {
+        this.register(this.user)
       },
       login () {
         window.router.go('login')

@@ -20,6 +20,11 @@
     components: {
       Scrolltop,
       Sidebar
+    },
+    vuex: {
+      getters: {
+        user: ({user}) => user.user
+      }
     }
   }
 </script>

@@ -1,14 +1,16 @@
 <template>
   <div class="app">
+    <Msg></Msg>
     <router-view></router-view>
   </div>
 </template>
 <script>
+  import store from './vuex/store'
+  import Msg from './components/Msg/Msg'
   export default {
-    data () {
-      return {
-        status: 0
-      }
+    store,
+    components: {
+      Msg
     }
   }
 </script>

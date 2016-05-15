@@ -12,7 +12,7 @@
 
 <script>
   import marked from 'marked'
-  import tools from '../utils/tools'
+  import tools from '../../utils/tools'
 
   export default {
     data () {

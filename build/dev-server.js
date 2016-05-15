@@ -86,12 +86,6 @@ app.use(session({
   secret: 'keyboard'
 }))
 
-app.get('/login', function(req, res) {
-  if (req.session.user) {
-    res.redirect('index')
-  }
-})
-
 app.get('/getStatus', function(req, res) {
   if (req.session.user) {
     console.log(req.session.user)
@@ -99,30 +93,24 @@ app.get('/getStatus', function(req, res) {
       success: 200
     })
   }else {
-    res.status(200).json({
-      success: 404
-    })
+    res.status(401)
   }
 })
 
 app.post('/login', function(req, res) {
   var user = req.body
+  if (!user || !user.username) {
+    res.status(400).json({error_msg: '用户名和密码为空'})
+  }
   User.find(user, function(err, doc) {
     if (err) {
-      res.status(500).json({
-        success: 500
-      })
-      return
+      res.status(500).json({error_msg: '服务器出现错误'})
     }
     if (doc.length === 1) {
       req.session.user = user.username
-      res.status(200).json({
-        success: 200
-      })
+      res.status(200).json({user: user.username})
     } else {
-      res.status(404).json({
-        success: 404
-      })
+      res.status(404).json({error_msg: '用户名或密码输入错误'})
     }
   })
 })
@@ -133,11 +121,11 @@ app.post('/register', function(req, res) {
   User.find({
     username: username
   }, function(err, doc) {
-    if (err) console.log(err);
+    if (err) {
+      res.status(500).json({error_msg: '服务器出现错误'})
+    }
     if (doc.length >= 1) {
-      res.json({
-        success: 300
-      })
+      res.status(404).json({error_msg: '用户名已经存在'})
     } else {
       var user = new User({
         username: username,
@@ -145,14 +133,10 @@ app.post('/register', function(req, res) {
       })
       user.save(function(err, doc) {
         if (err) {
-          return
+          res.status(500).json({error_msg: '服务器出现错误'})
         }
-        if (doc.length === 1){
-          req.session.user = username
-          res.json({
-            success: 200
-          })
-        }
+        req.session.user = doc.username
+        res.status(200).json({user: doc.username})
       })
     }
   })
@@ -173,7 +157,7 @@ app.post('/save', function(req, res) {
       if (err) return
     })
   } else {
-    res.status('401').send()
+    res.status(401).json({error_msg: '请登陆用户'})
   }
 })
 
@@ -191,7 +175,16 @@ app.get('/todos', function(req, res) {
       res.json(doc)
     })
   } else {
-    res.redirect('404')
+    res.status(401).json({error_msg: '请登陆用户'})
+  }
+})
+
+app.get('/logout', function (req, res){
+  if(req.session.user){
+    req.session.user = null
+    res.status(200).send()
+  } else {
+    res.status(401).json({error_msg: '您还未登陆，无法退出登陆'})
   }
 })
 

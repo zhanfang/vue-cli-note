@@ -1,10 +1,9 @@
-import Login from './components/Login'
-import Register from './components/Register'
-import Index from './components/Index'
-import Help from './components/Help'
-import Todos from './components/Todos'
-import Editmd from './components/Editmd'
-import User from './components/User'
+import Login from './components/Login/Login'
+import Register from './components/Register/Register'
+import Index from './components/Index/Index'
+import Help from './components/Help/Help'
+import Todos from './components/Todos/Todos'
+import User from './components/User/User'
 
 export default function (router) {
   router.map({
@@ -27,9 +26,6 @@ export default function (router) {
           component: User
         }
       }
-    },
-    '/edit': {
-      component: Editmd
     }
   })
 }

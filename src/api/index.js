@@ -1,10 +1,18 @@
-import { UserResource, AuthResource } from './resources'
+import * as Resource from './resources'
 
 export default {
-  localLogin: function (data) {
-    return AuthResource.save(data)
+  login: function (data) {
+    return Resource.AuthResource.save(data)
+  },
+  register: function (data) {
+    return Resource.RegisterResource.save(data)
+  },
+  logout: function () {
+    return Resource.LogoutResource.get()
   },
   getMe: function () {
-    return UserResource.get({id: 'me'})
-  }
+    return Resource.UserResource.get({id: 'me'})
+  },
+  saveTodos: function (todos) {}
+
 }
