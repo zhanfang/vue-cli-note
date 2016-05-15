@@ -40,7 +40,6 @@
     },
     methods: {
       clickLogin () {
-        console.log(this.user)
         this.login(this.user)
       },
       register () {

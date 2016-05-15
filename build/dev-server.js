@@ -133,12 +133,10 @@ app.post('/register', function(req, res) {
       })
       user.save(function(err, doc) {
         if (err) {
-          return
+          res.status(500).json({error_msg: '服务器出现错误'})
         }
-        if (doc.length === 1){
-          req.session.user = username
-          res.status(200)
-        }
+        req.session.user = doc.username
+        res.status(200).json({user: doc.username})
       })
     }
   })

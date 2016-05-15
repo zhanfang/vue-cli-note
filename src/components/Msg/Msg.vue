@@ -1,5 +1,5 @@
 <template>
-  <div class="msg" transition="alert" v-show="msg.type">
+  <div class="msg" transition="alert" v-show="msg.type" :class="{error: msg.type=='error'}">
     <span class="glyphicon glyphicon-exclamation-sign"></span>
     <span>{{msg.content}}</span>
   </div>
@@ -24,6 +24,9 @@
     border-radius: 7px;
     box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.1);
     background: #ffffff;
+  }
+  .error{
+    color: #FE6962;
   }
   .glyphicon-exclamation-sign{
     padding-right: 10px;

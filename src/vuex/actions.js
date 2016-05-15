@@ -17,6 +17,19 @@ export const login = (store, user) => {
     showMsg(store, res.data.error_msg || '登录失败')
   })
 }
+export const register = (store, user) => {
+  api.register(user).then(res => {
+    console.log('ok', res.ok)
+    if (!res.ok) {
+      return showMsg(store, res.data.error_msg || '注册失败')
+    }
+    store.dispatch(types.REGISTER_SUCCESS, {user: user})
+    showMsg(store, '注册成功', 'success')
+    store.router.go({path: '/index/todos'})
+  }, res => {
+    showMsg(store, res.data.error_msg || '注册失败')
+  })
+}
 export const logout = (store) => {
   api.logout().then(res => {
     if (!res.ok) {
