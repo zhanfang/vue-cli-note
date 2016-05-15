@@ -182,7 +182,7 @@ app.get('/todos', function(req, res) {
 app.get('/logout', function (req, res){
   if(req.session.user){
     req.session.user = null
-    res.status(200)
+    res.status(200).send()
   } else {
     res.status(401).json({error_msg: '您还未登陆，无法退出登陆'})
   }

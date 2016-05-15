@@ -33,7 +33,7 @@ export const register = (store, user) => {
 export const logout = (store) => {
   api.logout().then(res => {
     if (!res.ok) {
-      return showMsg(store, res.data.error_msg || '登陆失败')
+      return showMsg(store, res.data.error_msg || '登出失败')
     }
     showMsg(store, '登出成功', 'success')
   })
