@@ -30,3 +30,6 @@ export const UserResource = Vue.resource(API_ROOT + 'users{/id}')
 export const AuthResource = Vue.resource(API_ROOT + 'login')
 export const LogoutResource = Vue.resource(API_ROOT + 'logout')
 export const RegisterResource = Vue.resource(API_ROOT + 'register')
+export const TodosResource = Vue.resource(API_ROOT + 'todos')
+export const SaveResource = Vue.resource(API_ROOT + 'save')
+

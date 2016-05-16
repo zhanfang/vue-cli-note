@@ -18,7 +18,7 @@
       </ul>
     </div>
     <footer class="footer" v-show="todos.length">
-      <span class="glyphicon glyphicon-ok" :class="{okAll: allDone}" @click="toggleAll()"></span>
+      <span class="glyphicon glyphicon-ok" :class="{okAll: allDone}" @click="toggleAll(todos, allDone)"></span>
       <span class="todo-count">
         <strong v-text="remaining"></strong> {{remaining | pluralize 'item'}} left
       </span>
@@ -35,6 +35,7 @@
 <script>
   import Todo from './Todo'
   import Editmd from './Editmd'
+  import { getTodos, saveTodos, toggleAll } from '../../vuex/actions.js'
 
   const filters = {
     all: function (todos) {
@@ -56,15 +57,21 @@
       Todo,
       Editmd
     },
-    ready: function () {
-      this.$http.get('/todos').then((res) => {
-        this.$set('todos', res.data[0].todos)
-      })
+    vuex: {
+      getters: {
+        todos: ({notes}) => notes.todos
+      },
+      actions: {
+        getTodos, saveTodos, toggleAll
+      }
+    },
+    created () {
+      if (this.todos.length === 0) {
+        this.getTodos()
+      }
     },
     data () {
       return {
-        status: 0,
-        todos: [],
         visibility: 'all',
         query: '',
         detail: '',
@@ -86,19 +93,10 @@
       }
     },
     methods: {
-      toggleAll: function () {
-        const done = this.allDone
-        this.todos.forEach(function (todo) {
-          todo.completed = !done
-        })
-      },
-      removeCompleted: function () {
-        this.todos = filters.active(this.todos)
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
-      },
+      // removeCompleted: function () {
+      //   this.todos = filters.active(this.todos)
+      //   this.saveTodos(this.todos)
+      // },
       changeAdding: function () {
         this.adding = !this.adding
       },

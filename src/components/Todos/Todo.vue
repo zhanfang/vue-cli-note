@@ -15,16 +15,19 @@
 <script>
   import marked from 'marked'
   import tools from '../../utils/tools'
+  import {saveTodos} from '../../vuex/actions.js'
 
   export default {
+    vuex: {
+      actions: {
+        saveTodos
+      }
+    },
     props: ['todos', 'query', 'adding', 'cachetodo', 'detail'],
     methods: {
       toggleStatus: function (todo) {
         todo.completed = !todo.completed
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
+        this.saveTodos(this.todos)
       },
       exportTodo: function (todo) {
         let now = new Date()
@@ -38,10 +41,7 @@
       },
       removeTodo: function (todo) {
         this.todos.$remove(todo)
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('save', todos).then((res) => {
-          console.log(res.data)
-        })
+        this.saveTodos(this.todos)
       }
     },
     filters: {

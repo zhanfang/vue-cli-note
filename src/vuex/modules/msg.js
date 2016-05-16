@@ -8,8 +8,8 @@ const state = {
 }
 
 const mutations = {
-  [SHOW_MSG] (state, msg) {
-    state.msg = {...msg}
+  [SHOW_MSG] (state, action) {
+    state.msg = {...action}
   },
   [HIDE_MSG] (state) {
     state.msg = {

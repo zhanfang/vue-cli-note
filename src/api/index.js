@@ -13,6 +13,10 @@ export default {
   getMe: function () {
     return Resource.UserResource.get({id: 'me'})
   },
-  saveTodos: function (todos) {}
-
+  getTodos: function () {
+    return Resource.TodosResource.get()
+  },
+  saveTodos: function (todos) {
+    return Resource.SaveResource.save(todos)
+  }
 }

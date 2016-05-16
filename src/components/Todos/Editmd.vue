@@ -15,7 +15,13 @@
 </template>
 <script>
   import marked from 'marked'
+  import {saveTodos} from '../../vuex/actions.js'
   export default {
+    vuex: {
+      actions: {
+        saveTodos
+      }
+    },
     props: ['adding', 'detail', 'todos', 'cachetodo'],
     methods: {
       save: function () {
@@ -32,10 +38,7 @@
           this.todos.$remove(cacheTodo)
           this.cacheTodo = null
         }
-        const todos = JSON.stringify(this.todos)
-        this.$http.post('/save', todos).then((res) => {
-          console.log(res.data)
-        })
+        this.saveTodos(this.todos)
       },
       cancelAdd: function () {
         const cacheTodo = this.cachetodo

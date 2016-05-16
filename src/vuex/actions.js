@@ -36,7 +36,36 @@ export const logout = (store) => {
       return showMsg(store, res.data.error_msg || '登出失败')
     }
     showMsg(store, '登出成功', 'success')
+  }, res => {
+    showMsg(store, res.data.error_msg || '登出失败')
   })
   store.router.go({path: '/login'})
   store.dispatch(types.LOGOUT_USER)
+}
+
+export const getTodos = (store) => {
+  api.getTodos().then(res => {
+    if (!res.ok) {
+      return showMsg(store, res.data.error_msg || '获取笔记失败')
+    }
+    store.dispatch(types.GET_NOTES, {todos: res.data.todos})
+  }, res => {
+    showMsg(store, res.data.error_msg || '获取笔记内容失败')
+  })
+}
+
+export const saveTodos = (store, data) => {
+  api.saveTodos(data).then(res => {
+    if (!res.ok) {
+      return showMsg(store, res.data.error_msg || '保存笔记失败')
+    }
+    store.dispatch(types.SAVE_NOTES, {todos: data})
+  }, res => {
+    showMsg(store, res.data.error_msg || '保存笔记失败啦，请重试！')
+  })
+}
+
+export const toggleAll = ({dispatch}, todos, done) => {
+  console.log(todos)
+  dispatch(types.TOGGLE_ALL, {done: done})
 }
