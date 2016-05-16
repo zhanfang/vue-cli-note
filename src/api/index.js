@@ -17,6 +17,6 @@ export default {
     return Resource.TodosResource.get()
   },
   saveTodos: function (todos) {
-    return Resource.SaveResource.save(todos)
+    return Resource.SaveResource.save(JSON.stringify(todos))
   }
 }

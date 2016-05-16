@@ -11,14 +11,14 @@
         >
       </header>
 
-      <Editmd :adding.sync="adding" :todos.sync="todos" :detail.sync="detail" :cachetodo.sync="cacheTodo"></Editmd>
+      <Editmd :adding.sync="adding" :todos="todos" :detail.sync="detail" :cachetodo.sync="cacheTodo"></Editmd>
 
       <ul class="main">
         <Todo :adding.sync="adding" :todos.sync="filteredTodos" :detail.sync="detail" :cachetodo.sync="cacheTodo" :query.sync="query"></Todo>
       </ul>
     </div>
     <footer class="footer" v-show="todos.length">
-      <span class="glyphicon glyphicon-ok" :class="{okAll: allDone}" @click="toggleAll(todos, allDone)"></span>
+      <span class="glyphicon glyphicon-ok" :class="{okAll: allDone}" @click="toggleAll(allDone)"></span>
       <span class="todo-count">
         <strong v-text="remaining"></strong> {{remaining | pluralize 'item'}} left
       </span>
@@ -35,7 +35,7 @@
 <script>
   import Todo from './Todo'
   import Editmd from './Editmd'
-  import { getTodos, saveTodos, toggleAll } from '../../vuex/actions.js'
+  import { getTodos, saveTodos } from '../../vuex/actions.js'
 
   const filters = {
     all: function (todos) {
@@ -62,7 +62,7 @@
         todos: ({notes}) => notes.todos
       },
       actions: {
-        getTodos, saveTodos, toggleAll
+        getTodos, saveTodos
       }
     },
     created () {
@@ -93,10 +93,19 @@
       }
     },
     methods: {
-      // removeCompleted: function () {
-      //   this.todos = filters.active(this.todos)
-      //   this.saveTodos(this.todos)
-      // },
+      toggleAll: function (done) {
+        const newTodos = this.todos
+        newTodos.forEach(function (todo) {
+          todo.completed = !done
+        })
+        console.log(newTodos)
+        this.saveTodos(newTodos)
+      },
+      removeCompleted: function () {
+        let newTodos = this.todos
+        newTodos = filters.active(newTodos)
+        this.saveTodos(newTodos)
+      },
       changeAdding: function () {
         this.adding = !this.adding
       },

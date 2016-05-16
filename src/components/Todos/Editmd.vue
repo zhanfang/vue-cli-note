@@ -27,18 +27,19 @@
       save: function () {
         const detail = this.detail.trim()
         if (!detail) return
-        this.todos.unshift({
+        const newTodos = this.todos
+        newTodos.unshift({
           detail: detail,
           completed: false
         })
-        this.detail = ''
-        this.adding = false
         const cacheTodo = this.cachetodo
         if (cacheTodo) {
-          this.todos.$remove(cacheTodo)
+          newTodos.$remove(cacheTodo)
           this.cacheTodo = null
         }
-        this.saveTodos(this.todos)
+        this.saveTodos(newTodos)
+        this.detail = ''
+        this.adding = false
       },
       cancelAdd: function () {
         const cacheTodo = this.cachetodo

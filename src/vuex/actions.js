@@ -64,8 +64,3 @@ export const saveTodos = (store, data) => {
     showMsg(store, res.data.error_msg || '保存笔记失败啦，请重试！')
   })
 }
-
-export const toggleAll = ({dispatch}, todos, done) => {
-  console.log(todos)
-  dispatch(types.TOGGLE_ALL, {done: done})
-}

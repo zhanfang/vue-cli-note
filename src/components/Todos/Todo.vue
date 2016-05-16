@@ -35,13 +35,14 @@
         tools.doSave(todo.detail, 'text/latex', now)
       },
       editedTodo: function (todo) {
-        this.cacheTodo = todo
+        this.cachetodo = todo
         this.adding = true
         this.detail = todo.detail
       },
       removeTodo: function (todo) {
-        this.todos.$remove(todo)
-        this.saveTodos(this.todos)
+        const newTodos = this.todos
+        newTodos.$remove(todo)
+        this.saveTodos(newTodos)
       }
     },
     filters: {
