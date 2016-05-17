@@ -7,6 +7,9 @@ export default {
   register: function (data) {
     return Resource.RegisterResource.save(data)
   },
+  getUser: function () {
+    return Resource.GetUserResource.get()
+  },
   logout: function () {
     return Resource.LogoutResource.get()
   },

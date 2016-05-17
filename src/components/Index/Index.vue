@@ -1,5 +1,5 @@
 <template>
-  <Sidebar :slide.sync="slide"></Sidebar>
+  <Sidebar :slide.sync="slide" :user="user"></Sidebar>
 
   <div class="all" :class="{onShow: slide}">
     <router-view></router-view>
@@ -11,7 +11,21 @@
 <script>
   import Scrolltop from './Scrolltop'
   import Sidebar from './Sidebar'
+  import {getUser} from '../../vuex/actions.js'
   export default {
+    vuex: {
+      getters: {
+        user: ({user}) => user.user
+      },
+      actions: {
+        getUser
+      }
+    },
+    created () {
+      if (this.user === '') {
+        this.getUser()
+      }
+    },
     data () {
       return {
         slide: false
@@ -20,11 +34,6 @@
     components: {
       Scrolltop,
       Sidebar
-    },
-    vuex: {
-      getters: {
-        user: ({user}) => user.user
-      }
     }
   }
 </script>

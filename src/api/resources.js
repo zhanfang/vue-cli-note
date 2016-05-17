@@ -20,7 +20,7 @@ Vue.http.interceptors.push({
   response (response) {
     // 这里可以对响应的结果进行处理
     if (response.status === 401) {
-      window.location.pathname = '/login'
+      window.router.go('login')
     }
     return response
   }
@@ -28,6 +28,7 @@ Vue.http.interceptors.push({
 
 export const UserResource = Vue.resource(API_ROOT + 'users{/id}')
 export const AuthResource = Vue.resource(API_ROOT + 'login')
+export const GetUserResource = Vue.resource(API_ROOT + 'user')
 export const LogoutResource = Vue.resource(API_ROOT + 'logout')
 export const RegisterResource = Vue.resource(API_ROOT + 'register')
 export const TodosResource = Vue.resource(API_ROOT + 'todos')

@@ -15,14 +15,19 @@
   </div>
 </template>
 <script>
-  import {login} from '../../vuex/actions'
+  import {login, getUserStatus} from '../../vuex/actions'
   export default {
     vuex: {
       getters: {
         localuser: ({user}) => user.user
       },
       actions: {
-        login
+        login, getUserStatus
+      }
+    },
+    created () {
+      if (this.localuser === '') {
+        this.getUserStatus()
       }
     },
     data () {

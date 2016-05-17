@@ -13,7 +13,7 @@ export default function (router) {
     '/register': {
       component: Register
     },
-    '/index': {
+    '/': {
       component: Index,
       subRoutes: {
         'todos': {
