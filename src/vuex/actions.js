@@ -10,7 +10,7 @@ export const login = (store, user) => {
     if (!res.ok) {
       return showMsg(store, res.data.error_msg || '登陆失败')
     }
-    store.dispatch(types.LOGIN_SUCCESS, {user: user})
+    store.dispatch(types.LOGIN_SUCCESS, {user: res.data.user})
     showMsg(store, '登陆成功', 'success')
     store.router.go({path: '/todos'})
   }, res => {
@@ -23,7 +23,7 @@ export const register = (store, user) => {
     if (!res.ok) {
       return showMsg(store, res.data.error_msg || '注册失败')
     }
-    store.dispatch(types.REGISTER_SUCCESS, {user: user})
+    store.dispatch(types.REGISTER_SUCCESS, {user: res.data.user})
     showMsg(store, '注册成功', 'success')
     store.router.go({path: '/todos'})
   }, res => {
