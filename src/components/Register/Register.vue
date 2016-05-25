@@ -19,19 +19,14 @@
   </div>
 </template>
 <script>
-  import {register, getUserStatus} from '../../vuex/actions.js'
+  import {register} from '../../vuex/actions.js'
   export default {
     vuex: {
       getters: {
         localuser: ({user}) => user.user
       },
       actions: {
-        register, getUserStatus
-      }
-    },
-    created () {
-      if (this.localuser === '') {
-        this.getUserStatus()
+        register
       }
     },
     data () {
