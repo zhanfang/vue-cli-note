@@ -1,8 +1,9 @@
 var path = require('path');
+var http = require('http');
 var express = require('express');
 
 var app = new express();
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3345;
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
