@@ -26,6 +26,8 @@ Vue.http.interceptors.push({
   }
 })
 
+console.log(API_ROOT)
+
 export const UserResource = Vue.resource(API_ROOT + 'users{/id}')
 export const AuthResource = Vue.resource(API_ROOT + 'login')
 export const GetUserResource = Vue.resource(API_ROOT + 'user')
